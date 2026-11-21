@@ -1,22 +1,57 @@
 services:
   nginx:
-    build: ./nginx/Dockerfile
+    build: ./requirements/nginx
     container_name: nginx
-    restart: always
+    image: nginx
+    env_file: .env
+    depends_on:
+      - wordpress
     ports:
-    - 443:443
-  wordpress:
-    build: ./wordpress/Dockerfile
-    container_name: wordpress
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - inception
     restart: always
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    image: wordpress
+    env_file: .env
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress_data:/var/www/wordpress
+    networks:
+      - inception
+    restart: always
+
   mariadb:
-    build: ./mariadb/Dockerfile
+    build: ./requirements/mariadb
     container_name: mariadb
+    image: nginx
+    env_file: .env
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
     restart: always
 
 volumes:
-  wordpress_database:
-  
-  wordpess_files:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_PATH}/mariadb
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${DATA_PATH}/wordpress
 
-network:
+networks:
+  inception:
+    driver: bridge
