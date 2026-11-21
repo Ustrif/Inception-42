@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 sleep 10
 
 if [ ! -f /var/www/wordpress/wp-config.php ]; then

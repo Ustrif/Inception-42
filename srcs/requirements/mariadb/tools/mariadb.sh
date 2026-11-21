@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # solves conf socket error
 mkdir -p /var/run/mysqld
 chown -R mysql:mysql /var/run/mysqld
