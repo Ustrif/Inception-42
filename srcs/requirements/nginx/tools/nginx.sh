@@ -7,4 +7,6 @@ if [ ! -f /etc/nginx/ssl/inception.crt ]; then
 	 -subj "/C=TR/ST=ISTANBUL/L=ISTANBUL/O=42ISTANBUL/OU=42/CN=$DOMAIN_NAME"
 fi
 
+sed -i "s/DOMAIN_NAME/$DOMAIN_NAME/g" /etc/nginx/conf.d/default.conf
+
 exec "$@"
