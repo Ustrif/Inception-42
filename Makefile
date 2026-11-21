@@ -18,10 +18,10 @@ start:
 	$(COMPOSE) start
 
 clean:
-	$(COMPOSE) down -v --rmi all
+	$(COMPOSE) down
 
-fclean: clean
-	docker system prune -af
+fclean:
+	$(COMPOSE) down -v --rmi all --remove-orphans
 	sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 
 re: fclean all
