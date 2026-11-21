@@ -1,22 +1,29 @@
-SRCS = *
-NAME = fixed
-FLAGS = -Wall -Wextra -Werror -std=c++98
-CXX = c++
+NAME = inception
+COMPOSE = docker compose -f ./srcs/docker-compose.yml
+DATA_DIR = $(HOME)/data
 
-all: $(NAME)
+all: up
 
-$(NAME): $(SRCS)
-	$(CXX) $(FLAGS) $(SRCS) -o $(NAME)
+up:
+	@mkdir -p $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
+	$(COMPOSE) up -d --build
+
+down:
+	$(COMPOSE) down
+
+stop:
+	$(COMPOSE) stop
+
+start:
+	$(COMPOSE) start
 
 clean:
-	rm -rf $(NAME)
+	$(COMPOSE) down -v --rmi all
 
 fclean: clean
+	docker system prune -af
+	sudo rm -rf $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 
 re: fclean all
 
-.PHONY: all clean fclean re
-
-A Makefile is also required and must be located at the root of your directory. It
-must set up your entire application (i.e., it has to build the Docker images using
-docker-compose.yml).
+.PHONY: all up down stop start clean fclean re
