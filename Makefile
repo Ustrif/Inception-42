@@ -18,7 +18,7 @@ start:
 	$(COMPOSE) start
 
 clean:
-	$(COMPOSE) down
+	$(COMPOSE) down --rmi all --remove-orphans
 
 fclean:
 	$(COMPOSE) down -v --rmi all --remove-orphans
